@@ -10,31 +10,57 @@ import UIKit
 
 class ListsTableViewController: UITableViewController {
     
+    @IBOutlet var listsTableView: UITableView!
+    
+    let database : SQLiteDataBase = SQLiteDataBase(databaseName: "MyDatabase")
+    
     var lists = [List]()
 
     override func viewDidLoad() {
         
         super.viewDidLoad()
         
+        createButton()
+        
+        setupDatabase()
+        
+        refreshList()
+        
+        print(lists)
+    }
+    
+    func createButton() {
         let newListButton = UIButton(frame: CGRect(origin: CGPoint(x: self.view.frame.width/2 - 25, y: self.view.frame.size.height - 70), size: CGSize(width: 50, height: 50)))
         newListButton.backgroundColor = UIColor.black
         newListButton.addTarget(self, action: #selector(self.newListButtonAction(_:)), for: .touchUpInside)
         self.navigationController?.view.addSubview(newListButton)
-        
-        let database : SQLiteDataBase = SQLiteDataBase(databaseName: "MyDatabase")
-        database.dropListsTable()
-        database.createListsTable()
-        database.insert(list: List(ID: 0, name:"List 1"))
-        database.insert(list: List(ID: 1, name: "Dinner List"))
-        
-        lists = database.selectAllLists()
-        
-        print(lists)
     }
     
     @objc func newListButtonAction(_: AnyObject) {
         print("Button Tapped")
         performSegue(withIdentifier: "toPopUpVCSegue", sender: self)
+    }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        if segue.identifier == "toPopUpVCSegue" {
+            let popup = segue.destination as! PopUpVC
+            popup.delegate = self
+        }
+    }
+    
+    func setupDatabase() {
+        database.dropListsTable()
+        database.createListsTable()
+        
+//        database.insert(list: List(ID: 0, name:"List 1"))
+//        database.insert(list: List(ID: 1, name: "Dinner List"))
+
+    }
+    
+    func refreshList() {
+        lists = database.selectAllLists()
+        listsTableView.reloadData()
+        print(lists)
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -78,4 +104,13 @@ class ListsTableViewController: UITableViewController {
 //        }
 //    }
 
+}
+
+extension ListsTableViewController: PopUpDelegate {
+    func popupValueEntered(value: String) {
+        refreshList()
+        print(value);
+    }
+    
+    
 }

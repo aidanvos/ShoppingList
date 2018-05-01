@@ -57,6 +57,9 @@
                         </prototypes>
                     </tableView>
                     <navigationItem key="navigationItem" id="8Y6-tC-OVP"/>
+                    <connections>
+                        <outlet property="listsTableView" destination="y1p-gQ-AZV" id="ppN-PJ-Ipi"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="4KS-cm-jQZ" userLabel="First Responder" sceneMemberID="firstResponder"/>
                 <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" id="tz9-Mi-BOw" userLabel="Purchase History Button">
@@ -109,7 +112,7 @@
                                     <constraint firstAttribute="width" constant="250" id="gPR-cm-uMC"/>
                                 </constraints>
                             </view>
-                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter name of list" textAlignment="natural" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="NW9-zc-7zp">
+                            <textField opaque="NO" contentMode="scaleToFill" fixedFrame="YES" contentHorizontalAlignment="left" contentVerticalAlignment="center" borderStyle="roundedRect" placeholder="Enter name of list" textAlignment="natural" minimumFontSize="20" translatesAutoresizingMaskIntoConstraints="NO" id="NW9-zc-7zp" userLabel="List Name Text Field">
                                 <rect key="frame" x="78" y="286" width="220" height="30"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <nil key="textColor"/>
@@ -123,6 +126,9 @@
                             <constraint firstItem="bw7-v9-lUA" firstAttribute="centerX" secondItem="hdo-hS-HTQ" secondAttribute="centerX" id="dqL-Fo-IDM"/>
                         </constraints>
                     </view>
+                    <connections>
+                        <outlet property="listNameTextField" destination="NW9-zc-7zp" id="axh-eD-sJC"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="bLR-Mh-ZeG" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>

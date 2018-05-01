@@ -8,42 +8,32 @@
 
 import UIKit
 
-class PopUpVC: UIViewController {
+class PopUpVC: UIViewController, UITextFieldDelegate {
 
-    @IBOutlet weak var listName: UITextField!
+    @IBOutlet weak var listNameTextField: UITextField!
     
-//    var newListName = String()
+    let database : SQLiteDataBase = SQLiteDataBase(databaseName: "MyDatabase")
+    
+    var delegate: PopUpDelegate?
     
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        listNameTextField.delegate = self
         // Do any additional setup after loading the view.
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     @IBAction func closePopUp(_ sender: Any) {
+        MakeNewList()
         dismiss(animated: true, completion: nil)
     }
     
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if segue.identifier == "toPopUpVCSegue" {
-//            let popup = segue.destination as! ListsViewController
-//            popup.newListName = listName.text!
-//        }
-//    }
-    
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+    func MakeNewList() {
+        var lists = [List]()
+        print(listNameTextField.text!)
+        database.insert(list: List(ID: 1, name: listNameTextField.text!))
+        
+        delegate?.popupValueEntered(value: "Hey")
+        
     }
-    */
 
 }
