@@ -14,7 +14,9 @@ class ListsTableViewController: UITableViewController {
     
     let database : SQLiteDataBase = SQLiteDataBase(databaseName: "MyDatabase")
     
-    var lists = [List]()
+    var newListButton = UIButton()
+    
+    var lists = [ListDetail]()
 
     override func viewDidLoad() {
         
@@ -25,19 +27,16 @@ class ListsTableViewController: UITableViewController {
         setupDatabase()
         
         refreshList()
-        
-        print(lists)
     }
     
     func createButton() {
-        let newListButton = UIButton(frame: CGRect(origin: CGPoint(x: self.view.frame.width/2 - 25, y: self.view.frame.size.height - 70), size: CGSize(width: 50, height: 50)))
+        newListButton = UIButton(frame: CGRect(origin: CGPoint(x: self.view.frame.width/2 - 25, y: self.view.frame.size.height - 100), size: CGSize(width: 50, height: 50)))
         newListButton.backgroundColor = UIColor.black
         newListButton.addTarget(self, action: #selector(self.newListButtonAction(_:)), for: .touchUpInside)
-        self.navigationController?.view.addSubview(newListButton)
+        self.view.addSubview(newListButton)
     }
     
     @objc func newListButtonAction(_: AnyObject) {
-        print("Button Tapped")
         performSegue(withIdentifier: "toPopUpVCSegue", sender: self)
     }
     
@@ -46,20 +45,39 @@ class ListsTableViewController: UITableViewController {
             let popup = segue.destination as! PopUpVC
             popup.delegate = self
         }
+        if segue.identifier == "toListSegue" {
+            //let newListView = segue.destination as! ListTableViewController
+            
+            guard let listTableViewController = segue.destination as? ListTableViewController else {
+                fatalError("Unexpected destination: \(segue.destination)")
+            }
+            
+            guard let selectedListCell = sender as? ListsTableViewCell else {
+                fatalError("Unexpected sender: \(String(describing: sender))")
+            }
+            guard let indexPath = tableView.indexPath(for: selectedListCell) else {
+                fatalError("The selected cell is not being displayed by the table")
+            }
+            let selectedList = lists[indexPath.row]
+            listTableViewController.list = selectedList
+
+            newListView.callBackFunc = callBackFunc
+        }
+    }
+    
+    func callBackFunc() -> () {
+        print("Call back worked!")
     }
     
     func setupDatabase() {
         database.dropListsTable()
         database.createListsTable()
-        
-//        database.insert(list: List(ID: 0, name:"List 1"))
-//        database.insert(list: List(ID: 1, name: "Dinner List"))
-
     }
     
     func refreshList() {
         lists = database.selectAllLists()
         listsTableView.reloadData()
+        
         print(lists)
     }
 
@@ -107,9 +125,8 @@ class ListsTableViewController: UITableViewController {
 }
 
 extension ListsTableViewController: PopUpDelegate {
-    func popupValueEntered(value: String) {
+    func popupValueEntered() {
         refreshList()
-        print(value);
     }
     
     

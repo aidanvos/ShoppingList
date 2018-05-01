@@ -29,7 +29,7 @@ class SQLiteDataBase
         
         let createTableQuery = """
                 CREATE TABLE Lists (
-                    ID INTEGER PRIMARY KEY NOT NULL,
+                    ID INTEGER PRIMARY KEY AUTOINCREMENT,
                     Name CHAR(255)
                 );
             """
@@ -73,14 +73,14 @@ class SQLiteDataBase
         sqlite3_finalize(createTableStatement)
     }
 //
-    func insert(list: List) {
+    func insert(listDetail: ListDetail) {
 
         let insertStatementQuery = "INSERT INTO Lists (ID, Name) VALUES (?, ?);"
 
         var insertStatement: OpaquePointer? = nil
         if sqlite3_prepare_v2(db, insertStatementQuery, -1, &insertStatement, nil) == SQLITE_OK {
-            sqlite3_bind_int(insertStatement, 1, list.ID)
-            sqlite3_bind_text(insertStatement, 2, list.name, -1, nil)
+            sqlite3_bind_null(insertStatement, 1)
+            sqlite3_bind_text(insertStatement, 2, listDetail.name, -1, nil)
             if sqlite3_step(insertStatement) == SQLITE_DONE {
                 print("Successfully inserted row.")
             }
@@ -97,8 +97,8 @@ class SQLiteDataBase
         sqlite3_finalize(insertStatement)
     }
     
-    func selectAllLists() -> [List] {
-        var result = [List]()
+    func selectAllLists() -> [ListDetail] {
+        var result = [ListDetail]()
 
         let selectStatementQuery = "SELECT id, name FROM Lists"
 
@@ -106,12 +106,12 @@ class SQLiteDataBase
 
         if sqlite3_prepare_v2(db, selectStatementQuery, -1, &selectStatement, nil) == SQLITE_OK {
             while sqlite3_step(selectStatement) == SQLITE_ROW {
-                let list = List (
+                let listDetail = ListDetail (
                     ID: sqlite3_column_int(selectStatement, 0),
                     name: String (cString:sqlite3_column_text(selectStatement, 1))
                 )
 
-                result += [list]
+                result += [listDetail]
             }
         }
         else {

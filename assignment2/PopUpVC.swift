@@ -28,11 +28,13 @@ class PopUpVC: UIViewController, UITextFieldDelegate {
     }
     
     func MakeNewList() {
-        var lists = [List]()
-        print(listNameTextField.text!)
-        database.insert(list: List(ID: 1, name: listNameTextField.text!))
         
-        delegate?.popupValueEntered(value: "Hey")
+        if (listNameTextField.text == "") {
+            return
+        }
+        database.insert(listDetail: ListDetail(ID: 0, name: listNameTextField.text!))
+        
+        delegate?.popupValueEntered()
         
     }
 
