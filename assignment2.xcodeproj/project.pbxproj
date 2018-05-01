@@ -8,26 +8,36 @@
 
 /* Begin PBXBuildFile section */
 		FAD7F81420970EC800273739 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD7F81320970EC800273739 /* AppDelegate.swift */; };
-		FAD7F81620970EC800273739 /* ListsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD7F81520970EC800273739 /* ListsViewController.swift */; };
 		FAD7F81B20970EC800273739 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAD7F81920970EC800273739 /* Main.storyboard */; };
 		FAD7F81D20970ECB00273739 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = FAD7F81C20970ECB00273739 /* Assets.xcassets */; };
 		FAD7F82020970ECB00273739 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAD7F81E20970ECB00273739 /* LaunchScreen.storyboard */; };
 		FAD7F828209723E500273739 /* SQLiteDatabase.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD7F827209723E500273739 /* SQLiteDatabase.swift */; };
 		FAD7F82C20973C6200273739 /* PopUpVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD7F82B20973C6200273739 /* PopUpVC.swift */; };
-		FAD7F82E209749AE00273739 /* List.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD7F82D209749AE00273739 /* List.swift */; };
+		FAD7F8302097ED0100273739 /* ListsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD7F82F2097ED0100273739 /* ListsTableViewCell.swift */; };
+		FAD7F8322097ED2200273739 /* ListsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD7F8312097ED2200273739 /* ListsTableViewController.swift */; };
+		FAD7F83620980ADF00273739 /* PopupDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD7F83520980ADF00273739 /* PopupDelegate.swift */; };
+		FAD7F83820981EAC00273739 /* ListTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD7F83720981EAC00273739 /* ListTableViewController.swift */; };
+		FAD7F83A209840FE00273739 /* ListTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD7F839209840FE00273739 /* ListTableViewCell.swift */; };
+		FAD7F83C209841ED00273739 /* ListDetail.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD7F83B209841ED00273739 /* ListDetail.swift */; };
+		FAD7F83E209842B400273739 /* Item.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD7F83D209842B400273739 /* Item.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
 		FAD7F81020970EC800273739 /* assignment2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = assignment2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAD7F81320970EC800273739 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
-		FAD7F81520970EC800273739 /* ListsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListsViewController.swift; sourceTree = "<group>"; };
 		FAD7F81A20970EC800273739 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main.storyboard; sourceTree = "<group>"; };
 		FAD7F81C20970ECB00273739 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		FAD7F81F20970ECB00273739 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		FAD7F82120970ECB00273739 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		FAD7F827209723E500273739 /* SQLiteDatabase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SQLiteDatabase.swift; sourceTree = "<group>"; };
 		FAD7F82B20973C6200273739 /* PopUpVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopUpVC.swift; sourceTree = "<group>"; };
-		FAD7F82D209749AE00273739 /* List.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = List.swift; sourceTree = "<group>"; };
+		FAD7F82F2097ED0100273739 /* ListsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListsTableViewCell.swift; sourceTree = "<group>"; };
+		FAD7F8312097ED2200273739 /* ListsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListsTableViewController.swift; sourceTree = "<group>"; };
+		FAD7F83520980ADF00273739 /* PopupDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PopupDelegate.swift; sourceTree = "<group>"; };
+		FAD7F83720981EAC00273739 /* ListTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTableViewController.swift; sourceTree = "<group>"; };
+		FAD7F839209840FE00273739 /* ListTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListTableViewCell.swift; sourceTree = "<group>"; };
+		FAD7F83B209841ED00273739 /* ListDetail.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListDetail.swift; sourceTree = "<group>"; };
+		FAD7F83D209842B400273739 /* Item.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Item.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -61,11 +71,16 @@
 			isa = PBXGroup;
 			children = (
 				FAD7F81320970EC800273739 /* AppDelegate.swift */,
-				FAD7F81520970EC800273739 /* ListsViewController.swift */,
 				FAD7F81920970EC800273739 /* Main.storyboard */,
+				FAD7F839209840FE00273739 /* ListTableViewCell.swift */,
+				FAD7F83720981EAC00273739 /* ListTableViewController.swift */,
 				FAD7F82B20973C6200273739 /* PopUpVC.swift */,
+				FAD7F82F2097ED0100273739 /* ListsTableViewCell.swift */,
+				FAD7F8312097ED2200273739 /* ListsTableViewController.swift */,
+				FAD7F83520980ADF00273739 /* PopupDelegate.swift */,
 				FAD7F827209723E500273739 /* SQLiteDatabase.swift */,
-				FAD7F82D209749AE00273739 /* List.swift */,
+				FAD7F83D209842B400273739 /* Item.swift */,
+				FAD7F83B209841ED00273739 /* ListDetail.swift */,
 				FAD7F81C20970ECB00273739 /* Assets.xcassets */,
 				FAD7F81E20970ECB00273739 /* LaunchScreen.storyboard */,
 				FAD7F82120970ECB00273739 /* Info.plist */,
@@ -146,9 +161,14 @@
 			files = (
 				FAD7F81420970EC800273739 /* AppDelegate.swift in Sources */,
 				FAD7F82C20973C6200273739 /* PopUpVC.swift in Sources */,
+				FAD7F83A209840FE00273739 /* ListTableViewCell.swift in Sources */,
 				FAD7F828209723E500273739 /* SQLiteDatabase.swift in Sources */,
-				FAD7F82E209749AE00273739 /* List.swift in Sources */,
-				FAD7F81620970EC800273739 /* ListsViewController.swift in Sources */,
+				FAD7F83620980ADF00273739 /* PopupDelegate.swift in Sources */,
+				FAD7F83E209842B400273739 /* Item.swift in Sources */,
+				FAD7F83C209841ED00273739 /* ListDetail.swift in Sources */,
+				FAD7F8302097ED0100273739 /* ListsTableViewCell.swift in Sources */,
+				FAD7F83820981EAC00273739 /* ListTableViewController.swift in Sources */,
+				FAD7F8322097ED2200273739 /* ListsTableViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
