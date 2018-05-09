@@ -24,16 +24,18 @@ class ListsTableViewController: UITableViewController {
         
         createButton()
         
-        setupDatabase()
+        createTable()
+        
+        createItemsTable()
         
         refreshList()
     }
     
     func createButton() {
-        newListButton = UIButton(frame: CGRect(origin: CGPoint(x: self.view.frame.width/2 - 25, y: self.view.frame.size.height - 100), size: CGSize(width: 50, height: 50)))
-        newListButton.backgroundColor = UIColor.black
+        newListButton = UIButton(frame: CGRect(origin: CGPoint(x: self.view.frame.width/2 - 50, y: self.view.frame.size.height - 125), size: CGSize(width: 100, height: 100)))
+        newListButton.setBackgroundImage(UIImage(named: "Add"), for: UIControlState.normal)
         newListButton.addTarget(self, action: #selector(self.newListButtonAction(_:)), for: .touchUpInside)
-        self.view.addSubview(newListButton)
+        self.navigationController?.view.addSubview(newListButton)
     }
     
     @objc func newListButtonAction(_: AnyObject) {
@@ -41,16 +43,20 @@ class ListsTableViewController: UITableViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        print("Segue!!")
         if segue.identifier == "toPopUpVCSegue" {
             let popup = segue.destination as! PopUpVC
             popup.delegate = self
         }
         if segue.identifier == "toListSegue" {
+            print("To new List")
             //let newListView = segue.destination as! ListTableViewController
             
-            guard let listTableViewController = segue.destination as? ListTableViewController else {
+            guard let navVC = segue.destination as? UINavigationController else {
                 fatalError("Unexpected destination: \(segue.destination)")
             }
+            
+            let listTableViewController = navVC.viewControllers.first as! ListTableViewController 
             
             guard let selectedListCell = sender as? ListsTableViewCell else {
                 fatalError("Unexpected sender: \(String(describing: sender))")
@@ -59,26 +65,35 @@ class ListsTableViewController: UITableViewController {
                 fatalError("The selected cell is not being displayed by the table")
             }
             let selectedList = lists[indexPath.row]
-            listTableViewController.list = selectedList
+            listTableViewController.listDetail = selectedList
 
-            newListView.callBackFunc = callBackFunc
+//            listTableViewController.callBackFunc = callBackFunc
         }
     }
     
-    func callBackFunc() -> () {
-        print("Call back worked!")
+//    func callBackFunc() -> () {
+//        print("Call back worked!")
+//    }
+    
+    func createTable() {
+        database.dropTable(tableName: "Lists")
+        let tableDetail = """
+            Lists (ID INTEGER PRIMARY KEY AUTOINCREMENT, Name CHAR(255))
+            """
+        database.createTable(tableDetail: tableDetail)
     }
     
-    func setupDatabase() {
-        database.dropListsTable()
-        database.createListsTable()
+    func createItemsTable() {
+        database.dropTable(tableName: "Items")
+        let tableDetail = """
+            Items (ID INTEGER PRIMARY KEY AUTOINCREMENT, ListId INTEGER, Quantity INTEGER, Price INTEGER, Name CHAR(255), DatePurchased CHAR(255))
+            """
+        database.createTable(tableDetail: tableDetail)
     }
     
     func refreshList() {
         lists = database.selectAllLists()
         listsTableView.reloadData()
-        
-        print(lists)
     }
 
     override func numberOfSections(in tableView: UITableView) -> Int {
@@ -102,26 +117,6 @@ class ListsTableViewController: UITableViewController {
         
         return cell
     }
-//
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        super.prepare(for: segue, sender: sender)
-//
-//        if segue.identifier == "ShowMovieDetailSegue" {
-//            guard let detailViewController = segue.destination as? DetailViewController else {
-//                fatalError("Unexpected destination: \(segue.destination)")
-//            }
-//
-//            guard let selectedMovieCell = sender as? MovieUITableViewCell else {
-//                fatalError("Unexpected sender: \(String(describing: sender))")
-//            }
-//            guard let indexPath = tableView.indexPath(for: selectedMovieCell) else {
-//                fatalError("The selected cell is not being displayed by the table")
-//            }
-//            let selectedMovie = movies[indexPath.row]
-//            detailViewController.movie = selectedMovie
-//        }
-//    }
-
 }
 
 extension ListsTableViewController: PopUpDelegate {
