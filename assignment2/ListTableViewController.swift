@@ -50,7 +50,6 @@ class ListTableViewController: UITableViewController {
     
     func refreshList () {
         list = database.selectAllItems(listId: (listDetail?.ID)!)
-        print(list)
         listTableView.reloadData()
     }
     
@@ -79,12 +78,40 @@ class ListTableViewController: UITableViewController {
         
         if let listCell = cell as? ListTableViewCell {
             listCell.titleLabel.text = item.name as String
+            listCell.quantityLabel.text = String(item.quantity)
+            listCell.priceLabel.text = String(item.price)
+            let total = item.quantity * item.price
+            listCell.totalLabel.text = String(format: "%.2f", total)
         }
-        
         return cell
     }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        
+        if editingStyle == .delete {
+            
+            let item = list[indexPath.row]
+            
+            database.deleteItem(itemId: item.ID)
+            
+            list = database.selectAllItems(listId: (listDetail?.ID)!)
+            
+            // delete the table view row
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            
+        } else if editingStyle == .insert {
+            // Not used in our example, but if you were adding a new row, this is where you would do it.
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if tableView.cellForRow(at: indexPath)?.accessoryType == UITableViewCellAccessoryType.checkmark {
+            tableView.cellForRow(at: indexPath)?.accessoryType = UITableViewCellAccessoryType.none
+        } else {
+            tableView.cellForRow(at: indexPath)?.accessoryType = UITableViewCellAccessoryType.checkmark
+        }
+    }
 }
-
 extension ListTableViewController: PopUpItemDelegate {
     func popupItemEntered() {
         refreshList()
