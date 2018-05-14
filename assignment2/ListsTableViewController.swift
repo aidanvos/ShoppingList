@@ -43,14 +43,11 @@ class ListsTableViewController: UITableViewController {
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        print("Segue!!")
         if segue.identifier == "toPopUpVCSegue" {
             let popup = segue.destination as! PopUpVC
             popup.delegate = self
         }
         if segue.identifier == "toListSegue" {
-            print("To new List")
-            //let newListView = segue.destination as! ListTableViewController
             
             guard let navVC = segue.destination as? UINavigationController else {
                 fatalError("Unexpected destination: \(segue.destination)")
@@ -77,18 +74,13 @@ class ListsTableViewController: UITableViewController {
     
     func createTable() {
         database.dropTable(tableName: "Lists")
-        let tableDetail = """
-            Lists (ID INTEGER PRIMARY KEY AUTOINCREMENT, Name CHAR(255))
-            """
-        database.createTable(tableDetail: tableDetail)
+
+        database.createTable(tableName: "Lists")
     }
     
     func createItemsTable() {
         database.dropTable(tableName: "Items")
-        let tableDetail = """
-            Items (ID INTEGER PRIMARY KEY AUTOINCREMENT, ListId INTEGER, Quantity INTEGER, Price INTEGER, Name CHAR(255), DatePurchased CHAR(255))
-            """
-        database.createTable(tableDetail: tableDetail)
+        database.createTable(tableName: "Items")
     }
     
     func refreshList() {
@@ -116,6 +108,24 @@ class ListsTableViewController: UITableViewController {
         }
         
         return cell
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        
+        if editingStyle == .delete {
+            
+            let selectedList = lists[indexPath.row]
+            
+            database.deleteList(listId: selectedList.ID)
+            
+            lists = database.selectAllLists()
+            
+            // delete the table view row
+            tableView.deleteRows(at: [indexPath], with: .fade)
+            
+        } else if editingStyle == .insert {
+            // Not used in our example, but if you were adding a new row, this is where you would do it.
+        }
     }
 }
 

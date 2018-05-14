@@ -32,7 +32,7 @@ class PopUpVC: UIViewController, UITextFieldDelegate {
         if (listNameTextField.text == "") {
             return
         }
-        database.insert(listDetail: ListDetail(ID: 0, name: listNameTextField.text!))
+        database.insertList(listDetail: ListDetail(ID: 0, name: listNameTextField.text!))
         
         delegate?.popupValueEntered()
         

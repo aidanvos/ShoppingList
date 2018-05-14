@@ -11,6 +11,9 @@ import UIKit
 class PopUpItemVC: UIViewController, UITextFieldDelegate {
     
     @IBOutlet weak var itemNameField: UITextField!
+    @IBOutlet weak var quantityField: UITextField!
+    @IBOutlet weak var priceField: UITextField!
+    
     
     let database : SQLiteDataBase = SQLiteDataBase(databaseName: "MyDatabase")
     
@@ -18,15 +21,26 @@ class PopUpItemVC: UIViewController, UITextFieldDelegate {
     
     var listDetail : ListDetail?
     
+    var quantity: Float32?
+    var price: Float32?
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         itemNameField.delegate = self
+        quantityField.delegate = self
+        priceField.delegate = self
 
     }
+    
     
     @IBAction func closePopUp(_ sender: Any) {
         AddNewItem()
         dismiss(animated: true, completion: nil)
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        print("Ended Editing...")
+
     }
 
     func AddNewItem() {
@@ -34,7 +48,11 @@ class PopUpItemVC: UIViewController, UITextFieldDelegate {
         if (itemNameField.text == "") {
             return
         }
-        database.insertItem(item: Item(ID: 0, listId: (listDetail?.ID)!, quantity: 2, price: 4, name: itemNameField.text as! NSString, datePurchased: "20/05/2018"))
+        
+        quantity = quantityField.text! == "" ? 1 : Float(quantityField.text!)!
+        price = priceField.text == "" ? 0 : Float(priceField.text!)!
+        
+        database.insertItem(item: Item(ID: 0, listId: (listDetail?.ID)!, quantity: quantity!, price: price!, name: itemNameField.text!, datePurchased: "20/05/2018"))
         
         delegate?.popupItemEntered()
         

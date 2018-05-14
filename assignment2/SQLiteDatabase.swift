@@ -25,102 +25,91 @@ class SQLiteDataBase
         print("Error:\(errorMessage)")
     }
     
-    func createTable (tableDetail: String) {
-        
-        let createTableQuery = """
-                CREATE TABLE \(tableDetail);
-            """
-
-        var createTableStatement: OpaquePointer? = nil
-        if (sqlite3_prepare_v2(db, createTableQuery, -1, &createTableStatement, nil) == SQLITE_OK) {
-            if sqlite3_step(createTableStatement) == SQLITE_DONE {
-                print("Lists table created.")
-            }
-            else {
-                print("Lists table could not be created.")
+    // General Query
+    
+    func generalQuery (query: String, description: String, message: String) {
+        var statement: OpaquePointer? = nil
+        if (sqlite3_prepare_v2(db, query, -1, &statement, nil) == SQLITE_OK) {
+            
+            if sqlite3_step(statement) == SQLITE_DONE {
+                print("\(description) \(message)")
+            } else {
+                print("\(description) could not be \(message)")
                 printCurrentSQLErrorMessage(db)
             }
-        }
-        else {
-            print("CREATE TABLE statement could not be prepared.")
+        } else {
+            print("\(description) statement could not be prepared")
             printCurrentSQLErrorMessage(db)
         }
         
-        sqlite3_finalize(createTableStatement)
+        sqlite3_finalize(statement)
+    }
+    
+    // Creating, dropping and inserting queries
+    
+    func createTable (tableName: String) {
+        
+        var query = ""
+        
+        switch tableName {
+        case "Lists":
+            query = """
+            Lists (ID INTEGER PRIMARY KEY AUTOINCREMENT, Name CHAR(255))
+            """
+            break
+        case "Items":
+            query = """
+            Items (ID INTEGER PRIMARY KEY AUTOINCREMENT, ListId INTEGER, Quantity INTEGER, Price INTEGER, Name CHAR(255), DatePurchased CHAR(255))
+            """
+            break
+        default:
+            print("No Table Name given")
+            break
+        }
+        
+        let createTableQuery = """
+                CREATE TABLE \(query);
+            """
+        
+        generalQuery(query: createTableQuery, description: "\(tableName) table", message: "created")
     }
 
     func dropTable (tableName: String) {
-
+        
         let dropTableQuery = "DROP TABLE \(tableName)"
-        var dropTableStatement: OpaquePointer? = nil
-        if (sqlite3_prepare_v2(db, dropTableQuery, -1, &dropTableStatement, nil) == SQLITE_OK) {
-            if sqlite3_step(dropTableStatement) == SQLITE_DONE {
-                print("\(tableName) table dropped.")
-            }
-            else {
-                print("\(tableName) table could not be dropped.")
-                printCurrentSQLErrorMessage(db)
-            }
-        }
-        else {
-            print("DROP TABLE statement could not be prepared.")
-            printCurrentSQLErrorMessage(db)
-        }
-
-        sqlite3_finalize(dropTableStatement)
+        
+        generalQuery(query: dropTableQuery, description: tableName, message: "dropped")
     }
-//
-    func insert(listDetail: ListDetail) {
+    
+    func deleteList (listId: Int32) {
+        print(listId)
+        let deleteStatement = "DELETE FROM Lists WHERE id=\(listId);"
+        
+        generalQuery(query: deleteStatement, description: "List \(String(listId))", message: "deleted")
+    }
 
-        let insertStatementQuery = "INSERT INTO Lists (ID, Name) VALUES (?, ?);"
+    func insertList(listDetail: ListDetail) {
 
-        var insertStatement: OpaquePointer? = nil
-        if sqlite3_prepare_v2(db, insertStatementQuery, -1, &insertStatement, nil) == SQLITE_OK {
-            sqlite3_bind_null(insertStatement, 1)
-            sqlite3_bind_text(insertStatement, 2, listDetail.name, -1, nil)
-            if sqlite3_step(insertStatement) == SQLITE_DONE {
-                print("Successfully inserted row.")
-            }
-            else {
-                print("Could not insert row.")
-                printCurrentSQLErrorMessage(db)
-            }
-        }
-        else {
-            print("INSERT statement could not be prepared.")
-            printCurrentSQLErrorMessage(db)
-        }
-
-        sqlite3_finalize(insertStatement)
+        let insertListQuery = "INSERT INTO Lists (ID, Name) VALUES (null, '\(listDetail.name)');"
+        
+        generalQuery(query: insertListQuery, description: listDetail.name, message: "inserted")
     }
    
     func insertItem(item: Item) {
         
-        let insertStatementQuery = "INSERT INTO Items (ID, ListId, Quantity, Price, Name, DatePurchased) VALUES (?, ?, ?, ?, ?, ?);"
-        var insertStatement: OpaquePointer? = nil
-        if sqlite3_prepare_v2(db, insertStatementQuery, -1, &insertStatement, nil) == SQLITE_OK {
-            sqlite3_bind_null(insertStatement, 1)
-            sqlite3_bind_int(insertStatement, 2, item.listId)
-            sqlite3_bind_int(insertStatement, 3, item.quantity)
-            sqlite3_bind_int(insertStatement, 4, item.price)
-            sqlite3_bind_text(insertStatement, 5, item.name.utf8String, -1, nil)
-            sqlite3_bind_text(insertStatement, 6, item.datePurchased.utf8String, -1, nil)
-            if sqlite3_step(insertStatement) == SQLITE_DONE {
-                print("Successfully inserted row.")
-            }
-            else {
-                print("Could not insert row.")
-                printCurrentSQLErrorMessage(db)
-            }
-        }
-        else {
-            print("INSERT statement could not be prepared.")
-            printCurrentSQLErrorMessage(db)
-        }
+        let insertItemQuery = "INSERT INTO Items (ID, ListId, Quantity, Price, Name, DatePurchased) VALUES (null, \(item.listId), \(item.quantity), \(item.price), '\(item.name)', '\(item.datePurchased)');"
         
-        sqlite3_finalize(insertStatement)
+        generalQuery(query: insertItemQuery, description: "Item \(item.name)", message: "inserted")
     }
     
+    func deleteItem (itemId: Int32) {
+        print(itemId)
+        let deleteStatement = "DELETE FROM Items WHERE id=\(itemId);"
+        
+        generalQuery(query: deleteStatement, description: "Item \(String(itemId))", message: "deleted")
+    }
+    
+    // Selecting queries
     
     func selectAllLists() -> [ListDetail] {
         var result = [ListDetail]()
@@ -160,10 +149,10 @@ class SQLiteDataBase
                 let item = Item (
                     ID: sqlite3_column_int(selectStatement, 0),
                     listId: sqlite3_column_int(selectStatement, 1),
-                    quantity: sqlite3_column_int(selectStatement, 2),
-                    price: sqlite3_column_int(selectStatement, 3),
-                    name: String (cString:sqlite3_column_text(selectStatement, 4)) as NSString,
-                    datePurchased: String (cString:sqlite3_column_text(selectStatement, 5)) as NSString
+                    quantity: Float32(sqlite3_column_double(selectStatement, 2)),
+                    price: Float32(sqlite3_column_double(selectStatement, 3)),
+                    name: String (cString:sqlite3_column_text(selectStatement, 4)),
+                    datePurchased: String (cString:sqlite3_column_text(selectStatement, 5))
                     )
                 result += [item]
             }
