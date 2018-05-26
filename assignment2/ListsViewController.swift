@@ -7,38 +7,33 @@
 //
 
 import UIKit
-
-class ListsTableViewController: UITableViewController {
+class ListsViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
-    @IBOutlet var listsTableView: UITableView!
     
     let database : SQLiteDataBase = SQLiteDataBase(databaseName: "MyDatabase")
     
-    var newListButton = UIButton()
+    @IBOutlet weak var listsTableView: UITableView!
     
     var lists = [ListDetail]()
 
     override func viewDidLoad() {
-        
         super.viewDidLoad()
-        
-        createButton()
+        listsTableView.delegate = self
+        listsTableView.dataSource = self
         
         createTable()
         
         createItemsTable()
         
+        createHistoryTable()
+        
         refreshList()
     }
     
-    func createButton() {
-        newListButton = UIButton(frame: CGRect(origin: CGPoint(x: self.view.frame.width/2 - 50, y: self.view.frame.size.height - 125), size: CGSize(width: 100, height: 100)))
-        newListButton.setBackgroundImage(UIImage(named: "Add"), for: UIControlState.normal)
-        newListButton.addTarget(self, action: #selector(self.newListButtonAction(_:)), for: .touchUpInside)
-        self.navigationController?.view.addSubview(newListButton)
+    @IBAction func historyButton(_ sender: Any) {
+        performSegue(withIdentifier: "toHistorySegue", sender: self)
     }
-    
-    @objc func newListButtonAction(_: AnyObject) {
+    @IBAction func addListButton(_ sender: Any) {
         performSegue(withIdentifier: "toPopUpVCSegue", sender: self)
     }
     
@@ -48,39 +43,35 @@ class ListsTableViewController: UITableViewController {
             popup.delegate = self
         }
         if segue.identifier == "toListSegue" {
-            
-            guard let navVC = segue.destination as? UINavigationController else {
+            guard let listViewController = segue.destination as? ListViewController else {
                 fatalError("Unexpected destination: \(segue.destination)")
             }
-            
-            let listTableViewController = navVC.viewControllers.first as! ListTableViewController 
-            
+
             guard let selectedListCell = sender as? ListsTableViewCell else {
                 fatalError("Unexpected sender: \(String(describing: sender))")
             }
-            guard let indexPath = tableView.indexPath(for: selectedListCell) else {
+            guard let indexPath = listsTableView.indexPath(for: selectedListCell) else {
                 fatalError("The selected cell is not being displayed by the table")
             }
             let selectedList = lists[indexPath.row]
-            listTableViewController.listDetail = selectedList
-
-//            listTableViewController.callBackFunc = callBackFunc
+            listViewController.listDetail = selectedList
         }
     }
     
-//    func callBackFunc() -> () {
-//        print("Call back worked!")
-//    }
-    
     func createTable() {
-        database.dropTable(tableName: "Lists")
+//        database.dropTable(tableName: "Lists")
 
         database.createTable(tableName: "Lists")
     }
     
     func createItemsTable() {
-        database.dropTable(tableName: "Items")
+//        database.dropTable(tableName: "Items")
         database.createTable(tableName: "Items")
+    }
+    
+    func createHistoryTable() {
+//        database.dropTable(tableName: "History")
+        database.createTable(tableName: "History")
     }
     
     func refreshList() {
@@ -88,17 +79,17 @@ class ListsTableViewController: UITableViewController {
         listsTableView.reloadData()
     }
 
-    override func numberOfSections(in tableView: UITableView) -> Int {
+    func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
     }
     
-    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+    func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of rows
         return lists.count
     }
 
-    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+    func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "ListsTableViewCell", for: indexPath)
         
         let list = lists[indexPath.row]
@@ -110,7 +101,7 @@ class ListsTableViewController: UITableViewController {
         return cell
     }
     
-    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         
         if editingStyle == .delete {
             
@@ -129,10 +120,10 @@ class ListsTableViewController: UITableViewController {
     }
 }
 
-extension ListsTableViewController: PopUpDelegate {
+extension ListsViewController: PopUpDelegate {
     func popupValueEntered() {
         refreshList()
     }
-    
+
     
 }
