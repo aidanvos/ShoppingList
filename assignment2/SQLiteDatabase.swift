@@ -98,6 +98,12 @@ class SQLiteDataBase
         
         generalQuery(query: insertListQuery, description: listDetail.name, message: "inserted")
     }
+    
+    func updateList(listDetail: ListDetail) {
+        let updateItemQuery = "UPDATE LISTS SET Name = '\(listDetail.name)' WHERE id = \(listDetail.ID);"
+        
+        generalQuery(query: updateItemQuery, description: "List \(listDetail.name)", message: "updated")
+    }
    
     func insertItem(item: Item, table: String) {
         let insertItemQuery = "INSERT INTO \(table) (ID, ListId, Quantity, Price, Name, DatePurchased) VALUES (null, \(item.listId), \(item.quantity), \(item.price), '\(item.name)', '\(item.datePurchased)');"

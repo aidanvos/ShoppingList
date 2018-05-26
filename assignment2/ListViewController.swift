@@ -1,7 +1,7 @@
 
 import UIKit
 
-class ListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
+class ListViewController: UIViewController, UITableViewDataSource, UITableViewDelegate, UITextFieldDelegate {
     
     let database : SQLiteDataBase = SQLiteDataBase(databaseName: "MyDatabase")
     
@@ -12,18 +12,22 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var listDetail : ListDetail?
     
     var selectedItem: Item?
+    
+    var delegate: PopUpDelegate?
 
     @IBOutlet var listTableView: UITableView!
-    @IBOutlet weak var titleLabel: UILabel!
+    @IBOutlet weak var titleField: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         listTableView.delegate = self
         listTableView.dataSource = self
         refreshList()
-        titleLabel.text = "Edit \((listDetail?.name)!)"
+        titleField.delegate = self
+        titleField.text = (listDetail?.name)!
     }
     @IBAction func homeButtonAction(_ sender: Any) {
+        delegate?.popupValueEntered()
         dismiss(animated: true, completion: nil)
     }
     @IBAction func addButtonAction(_ sender: Any) {
@@ -56,6 +60,20 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
     func numberOfSections(in tableView: UITableView) -> Int {
         // #warning Incomplete implementation, return the number of sections
         return 1
+    }
+    
+    func textFieldDidEndEditing(_ textField: UITextField) {
+        listDetail?.name = textField.text!
+        database.updateList(listDetail: listDetail!)
+    }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        titleField.resignFirstResponder()
+        return (true)
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {

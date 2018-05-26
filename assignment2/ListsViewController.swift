@@ -55,6 +55,7 @@ class ListsViewController: UIViewController, UITableViewDataSource, UITableViewD
             }
             let selectedList = lists[indexPath.row]
             listViewController.listDetail = selectedList
+            listViewController.delegate = self
         }
     }
     

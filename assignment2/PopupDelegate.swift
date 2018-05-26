@@ -7,3 +7,7 @@ protocol PopUpDelegate {
 protocol PopUpItemDelegate {
     func popupItemEntered()
 }
+
+protocol ListViewDelegate {
+    func popupValueEntered()
+}
