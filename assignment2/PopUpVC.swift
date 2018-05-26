@@ -37,5 +37,15 @@ class PopUpVC: UIViewController, UITextFieldDelegate {
         delegate?.popupValueEntered()
         
     }
+    
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        self.view.endEditing(true)
+    }
+    
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        listNameTextField.resignFirstResponder()
+        
+        return (true)
+    }
 
 }

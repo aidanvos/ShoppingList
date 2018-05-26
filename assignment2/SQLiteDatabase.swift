@@ -62,6 +62,11 @@ class SQLiteDataBase
             Items (ID INTEGER PRIMARY KEY AUTOINCREMENT, ListId INTEGER, Quantity INTEGER, Price INTEGER, Name CHAR(255), DatePurchased CHAR(255))
             """
             break
+        case "History":
+            query = """
+            History (ID INTEGER PRIMARY KEY AUTOINCREMENT, ListId INTEGER, Quantity INTEGER, Price INTEGER, Name CHAR(255), DatePurchased CHAR(255))
+            """
+            break
         default:
             print("No Table Name given")
             break
@@ -82,7 +87,6 @@ class SQLiteDataBase
     }
     
     func deleteList (listId: Int32) {
-        print(listId)
         let deleteStatement = "DELETE FROM Lists WHERE id=\(listId);"
         
         generalQuery(query: deleteStatement, description: "List \(String(listId))", message: "deleted")
@@ -95,16 +99,20 @@ class SQLiteDataBase
         generalQuery(query: insertListQuery, description: listDetail.name, message: "inserted")
     }
    
-    func insertItem(item: Item) {
-        
-        let insertItemQuery = "INSERT INTO Items (ID, ListId, Quantity, Price, Name, DatePurchased) VALUES (null, \(item.listId), \(item.quantity), \(item.price), '\(item.name)', '\(item.datePurchased)');"
+    func insertItem(item: Item, table: String) {
+        let insertItemQuery = "INSERT INTO \(table) (ID, ListId, Quantity, Price, Name, DatePurchased) VALUES (null, \(item.listId), \(item.quantity), \(item.price), '\(item.name)', '\(item.datePurchased)');"
         
         generalQuery(query: insertItemQuery, description: "Item \(item.name)", message: "inserted")
     }
     
-    func deleteItem (itemId: Int32) {
-        print(itemId)
-        let deleteStatement = "DELETE FROM Items WHERE id=\(itemId);"
+    func updateItem(item: Item, table: String) {
+        let updateItemQuery = "UPDATE \(table) SET Quantity = \(item.quantity), Price = \(item.price), Name = '\(item.name)', DatePurchased = '\(item.datePurchased)' WHERE id = \(item.ID);"
+        
+        generalQuery(query: updateItemQuery, description: "Item \(item.name)", message: "updated")
+    }
+    
+    func deleteItem (itemId: Int32, table: String) {
+        let deleteStatement = "DELETE FROM \(table) WHERE id=\(itemId);"
         
         generalQuery(query: deleteStatement, description: "Item \(String(itemId))", message: "deleted")
     }
@@ -137,7 +145,7 @@ class SQLiteDataBase
         return result
     }
     
-    func selectAllItems(listId: Int32) -> [Item] {
+    func selectItems(listId: Int32) -> [Item] {
         var result = [Item]()
         
         let selectStatementQuery = "SELECT id, listId, quantity, price, name, datePurchased FROM Items WHERE listId=\(listId)"
@@ -162,7 +170,33 @@ class SQLiteDataBase
             printCurrentSQLErrorMessage(db)
         }
         sqlite3_finalize(selectStatement)
+        return result
+    }
+    
+    func selectItemsFromHistory() -> [Item] {
+        var result = [Item]()
         
+        let selectStatementQuery = "SELECT id, listId, quantity, price, name, datePurchased FROM History"
+        
+        var selectStatement: OpaquePointer? = nil
+        if sqlite3_prepare_v2(db, selectStatementQuery, -1, &selectStatement, nil) == SQLITE_OK {
+            while sqlite3_step(selectStatement) == SQLITE_ROW {
+                let item = Item (
+                    ID: sqlite3_column_int(selectStatement, 0),
+                    listId: sqlite3_column_int(selectStatement, 1),
+                    quantity: Float32(sqlite3_column_double(selectStatement, 2)),
+                    price: Float32(sqlite3_column_double(selectStatement, 3)),
+                    name: String (cString:sqlite3_column_text(selectStatement, 4)),
+                    datePurchased: String (cString:sqlite3_column_text(selectStatement, 5))
+                )
+                result += [item]
+            }
+        }
+        else {
+            print("SELECT statement could not be prepared.")
+            printCurrentSQLErrorMessage(db)
+        }
+        sqlite3_finalize(selectStatement)
         return result
     }
 }

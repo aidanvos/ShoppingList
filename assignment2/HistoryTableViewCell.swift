@@ -1,13 +1,16 @@
+//
+//  HistoryTableViewCell.swift
+//  assignment2
+//
+//  Created by Alex Viney on 14/5/18.
+//  Copyright © 2018 Alex Viney. All rights reserved.
+//
+
 import UIKit
 
-class ListTableViewCell: UITableViewCell {
-
-    @IBOutlet weak var titleLabel: UILabel!
-    @IBOutlet weak var quantityLabel: UILabel!
-    @IBOutlet weak var priceLabel: UILabel!
-    @IBOutlet weak var totalLabel: UILabel!
+class HistoryTableViewCell: UITableViewCell {
+    @IBOutlet weak var itemLabel: UILabel!
     
-    @IBOutlet weak var checkButton: UIButton!
     override func awakeFromNib() {
         super.awakeFromNib()
         // Initialization code
