@@ -67,6 +67,11 @@ class SQLiteDataBase
             History (ID INTEGER PRIMARY KEY AUTOINCREMENT, ListId INTEGER, Quantity INTEGER, Price INTEGER, Name CHAR(255), DatePurchased CHAR(255))
             """
             break
+        case "Recent":
+            query = """
+            Recent (ID INTEGER PRIMARY KEY AUTOINCREMENT, ListId INTEGER, Quantity INTEGER, Price INTEGER, Name CHAR(255), DatePurchased CHAR(255))
+            """
+            break
         default:
             print("No Table Name given")
             break
@@ -179,10 +184,10 @@ class SQLiteDataBase
         return result
     }
     
-    func selectItemsFromHistory() -> [Item] {
+    func selectAllItems(tableName: String) -> [Item] {
         var result = [Item]()
         
-        let selectStatementQuery = "SELECT id, listId, quantity, price, name, datePurchased FROM History"
+        let selectStatementQuery = "SELECT id, listId, quantity, price, name, datePurchased FROM \(tableName)"
         
         var selectStatement: OpaquePointer? = nil
         if sqlite3_prepare_v2(db, selectStatementQuery, -1, &selectStatement, nil) == SQLITE_OK {

@@ -26,17 +26,22 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
         titleField.delegate = self
         titleField.text = (listDetail?.name)!
     }
+    
     @IBAction func homeButtonAction(_ sender: Any) {
         delegate?.popupValueEntered()
         dismiss(animated: true, completion: nil)
     }
     @IBAction func addButtonAction(_ sender: Any) {
-        selectedItem = nil
-        performSegue(withIdentifier: "editItemSegue", sender: self)
+        performSegue(withIdentifier: "toRecentItemsSegue", sender: self)
     }
     
     @IBAction func purchaseButtonAction(_ sender: Any) {
         addItemsToHistory()
+    }
+    
+    func addNewItem() {
+        selectedItem = nil
+        performSegue(withIdentifier: "editItemSegue", sender: self)
     }
     
     func refreshList () {
@@ -50,11 +55,17 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
             popup.listDetail = listDetail
             popup.delegate = self
             
+            // Do I still need this?
             if ((selectedItem) != nil) {
                 popup.item = selectedItem
                 popup.tableName = "Items"
             }
+        } else if segue.identifier == "toRecentItemsSegue" {
+            let recentModal = segue.destination as! RecentItemsVC
+            recentModal.listDetail = listDetail
+            recentModal.delegate = self
         }
+        
     }
 
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -149,8 +160,20 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
     }
 }
-extension ListViewController: PopUpItemDelegate {
+extension ListViewController: PopUpItemDelegate, RecentItemDelegate {
+    
+    
     func popupItemEntered() {
         refreshList()
     }
+    
+    func newItem(modal: RecentItemsVC) {
+        modal.dismiss(animated: true, completion: nil)
+        addNewItem()
+    }
+    
+    func itemAdded() {
+        refreshList()
+    }
+    
 }

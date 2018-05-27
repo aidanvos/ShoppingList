@@ -9,6 +9,8 @@
 /* Begin PBXBuildFile section */
 		FA0BF6BB20A9540D0078842D /* HistoryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0BF6BA20A9540D0078842D /* HistoryViewController.swift */; };
 		FA0BF6BF20A9578B0078842D /* HistoryTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0BF6BE20A9578B0078842D /* HistoryTableViewCell.swift */; };
+		FA0BF6C120B996860078842D /* RecentItemsVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0BF6C020B996860078842D /* RecentItemsVC.swift */; };
+		FA0BF6C320B996B20078842D /* RecentItemsTVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0BF6C220B996B20078842D /* RecentItemsTVC.swift */; };
 		FA0DE8B220A14B2C00BA421B /* EditItemModalVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = FA0DE8B120A14B2C00BA421B /* EditItemModalVC.swift */; };
 		FAD7F81420970EC800273739 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = FAD7F81320970EC800273739 /* AppDelegate.swift */; };
 		FAD7F81B20970EC800273739 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = FAD7F81920970EC800273739 /* Main.storyboard */; };
@@ -28,6 +30,8 @@
 /* Begin PBXFileReference section */
 		FA0BF6BA20A9540D0078842D /* HistoryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
 		FA0BF6BE20A9578B0078842D /* HistoryTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryTableViewCell.swift; sourceTree = "<group>"; };
+		FA0BF6C020B996860078842D /* RecentItemsVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentItemsVC.swift; sourceTree = "<group>"; };
+		FA0BF6C220B996B20078842D /* RecentItemsTVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RecentItemsTVC.swift; sourceTree = "<group>"; };
 		FA0DE8B120A14B2C00BA421B /* EditItemModalVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditItemModalVC.swift; sourceTree = "<group>"; };
 		FAD7F81020970EC800273739 /* assignment2.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = assignment2.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		FAD7F81320970EC800273739 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -93,6 +97,8 @@
 				FAD7F82120970ECB00273739 /* Info.plist */,
 				FA0BF6BA20A9540D0078842D /* HistoryViewController.swift */,
 				FA0BF6BE20A9578B0078842D /* HistoryTableViewCell.swift */,
+				FA0BF6C020B996860078842D /* RecentItemsVC.swift */,
+				FA0BF6C220B996B20078842D /* RecentItemsTVC.swift */,
 			);
 			path = assignment2;
 			sourceTree = "<group>";
@@ -176,10 +182,12 @@
 				FAD7F828209723E500273739 /* SQLiteDatabase.swift in Sources */,
 				FAD7F83620980ADF00273739 /* PopupDelegate.swift in Sources */,
 				FAD7F83E209842B400273739 /* Item.swift in Sources */,
+				FA0BF6C320B996B20078842D /* RecentItemsTVC.swift in Sources */,
 				FAD7F83C209841ED00273739 /* ListDetail.swift in Sources */,
 				FAD7F8302097ED0100273739 /* ListsTableViewCell.swift in Sources */,
 				FAD7F83820981EAC00273739 /* ListViewController.swift in Sources */,
 				FAD7F8322097ED2200273739 /* ListsViewController.swift in Sources */,
+				FA0BF6C120B996860078842D /* RecentItemsVC.swift in Sources */,
 				FA0DE8B220A14B2C00BA421B /* EditItemModalVC.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -11,3 +11,9 @@ protocol PopUpItemDelegate {
 protocol ListViewDelegate {
     func popupValueEntered()
 }
+
+protocol RecentItemDelegate {
+    func newItem(modal: RecentItemsVC)
+    func itemAdded()
+}
+

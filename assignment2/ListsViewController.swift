@@ -21,11 +21,7 @@ class ListsViewController: UIViewController, UITableViewDataSource, UITableViewD
         listsTableView.delegate = self
         listsTableView.dataSource = self
         
-        createTable()
-        
-        createItemsTable()
-        
-        createHistoryTable()
+        createTables()
         
         refreshList()
     }
@@ -59,20 +55,18 @@ class ListsViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
     
-    func createTable() {
+    func createTables() {
 //        database.dropTable(tableName: "Lists")
-
         database.createTable(tableName: "Lists")
-    }
-    
-    func createItemsTable() {
+        
 //        database.dropTable(tableName: "Items")
         database.createTable(tableName: "Items")
-    }
-    
-    func createHistoryTable() {
+        
 //        database.dropTable(tableName: "History")
         database.createTable(tableName: "History")
+        
+//        database.dropTable(tableName: "Recent")
+        database.createTable(tableName: "Recent")
     }
     
     func refreshList() {

@@ -66,7 +66,7 @@ class HistoryViewController: UIViewController, UITableViewDataSource, UITableVie
     }
     
     func refreshList () {
-        tempData = database.selectItemsFromHistory()
+        tempData = database.selectAllItems(tableName: "History")
         historyList.removeAll()
         for item in tempData {
             let range = fromDate...toDate
@@ -149,7 +149,7 @@ class HistoryViewController: UIViewController, UITableViewDataSource, UITableVie
             
             database.deleteItem(itemId: item.ID, table: "History")
             
-            historyList = database.selectItemsFromHistory()
+            historyList = database.selectAllItems(tableName: "History")
             
             // delete the table view row
             tableView.deleteRows(at: [indexPath], with: .fade)
@@ -159,7 +159,7 @@ class HistoryViewController: UIViewController, UITableViewDataSource, UITableVie
         }
     }
     
-    func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 
         selectedItem = historyList[indexPath.row]
         
