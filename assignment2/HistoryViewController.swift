@@ -52,7 +52,8 @@ class HistoryViewController: UIViewController, UITableViewDataSource, UITableVie
             let temp = item.quantity * item.price
             total += temp
         }
-        totalLabel.text = String(total)
+        let formattedTotal = String(format: "%.2f", total)
+        totalLabel.text = "Total Spent: $\(formattedTotal)"
     }
     
     @IBAction func homeButton(_ sender: Any) {
@@ -151,12 +152,12 @@ class HistoryViewController: UIViewController, UITableViewDataSource, UITableVie
             
             historyList = database.selectAllItems(tableName: "History")
             
+            calculateTotal(data: historyList)
+            
             // delete the table view row
             tableView.deleteRows(at: [indexPath], with: .fade)
             
-        } else if editingStyle == .insert {
-            // Not used in our example, but if you were adding a new row, this is where you would do it.
-        }
+        } 
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {

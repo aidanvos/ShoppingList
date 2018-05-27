@@ -18,6 +18,7 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
     var filteredList = [Item]()
     
     var isSearching = false
+    var clearChecks = false
 
     @IBOutlet weak var cartButton: UIButton!
     @IBOutlet var listTableView: UITableView!
@@ -74,6 +75,9 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
             let recentModal = segue.destination as! RecentItemsVC
             recentModal.listDetail = listDetail
             recentModal.delegate = self
+        } else if segue.identifier == "addToHistorySegue" {
+            let addToHistoryModal = segue.destination as! AddToHistoryVC
+            addToHistoryModal.delegate = self
         }
         
     }
@@ -119,7 +123,12 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
             let total = item.quantity * item.price
             listCell.checkButton.tag = indexPath.row
             listCell.checkButton.addTarget(self, action: #selector(self.checkCell(_:)), for: .touchUpInside)
+            
+            if (clearChecks) {
+                listCell.checkButton.setBackgroundImage(UIImage(named: "checkbox"), for: UIControlState.normal)
+            }
         }
+        
         return cell
     }
     
@@ -136,9 +145,7 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
             // delete the table view row
             tableView.deleteRows(at: [indexPath], with: .fade)
             
-        } else if editingStyle == .insert {
-            // Not used in our example, but if you were adding a new row, this is where you would do it.
-        }
+        } 
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
@@ -191,6 +198,7 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
             itemsToPurchase.remove(at: index)
             sender.setBackgroundImage(UIImage(named: "checkbox"), for: UIControlState.normal)
         } else {
+            print("ADD")
             itemsToPurchase.append(list[sender.tag])
             sender.setBackgroundImage(UIImage(named: "checkbox-checked"), for: UIControlState.normal)
         }
@@ -207,13 +215,20 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func addItemsToHistory () {
         
+        print("Here")
+        print(itemsToPurchase)
         for item in itemsToPurchase {
             database.insertItem(item: Item(ID: 0, listId: item.listId, quantity: item.quantity, price: item.price, name: item.name, datePurchased: item.datePurchased,
                                            tags: item.tags), table: "History")
+            print("What")
         }
+        
+        clearChecks = true
+        
+        performSegue(withIdentifier: "addToHistorySegue", sender: self)
     }
 }
-extension ListViewController: PopUpItemDelegate, RecentItemDelegate {
+extension ListViewController: PopUpItemDelegate, RecentItemDelegate, ToHistoryDelegate {
     
     
     func popupItemEntered() {
@@ -227,6 +242,12 @@ extension ListViewController: PopUpItemDelegate, RecentItemDelegate {
     
     func itemAdded() {
         refreshList()
+    }
+    
+    func clearCheckMarks() {
+        cartButton.setBackgroundImage(UIImage(named: "cart"), for: UIControlState.normal)
+        listTableView.reloadData()
+        clearChecks = false
     }
     
 }

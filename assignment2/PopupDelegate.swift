@@ -17,3 +17,7 @@ protocol RecentItemDelegate {
     func itemAdded()
 }
 
+protocol ToHistoryDelegate {
+    func clearCheckMarks()
+}
+
