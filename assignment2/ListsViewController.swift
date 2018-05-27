@@ -57,15 +57,13 @@ class ListsViewController: UIViewController, UITableViewDataSource, UITableViewD
     
     func createTables() {
 //        database.dropTable(tableName: "Lists")
-        database.createTable(tableName: "Lists")
-        
 //        database.dropTable(tableName: "Items")
-        database.createTable(tableName: "Items")
-        
 //        database.dropTable(tableName: "History")
-        database.createTable(tableName: "History")
-        
 //        database.dropTable(tableName: "Recent")
+        
+        database.createTable(tableName: "Lists")
+        database.createTable(tableName: "Items")
+        database.createTable(tableName: "History")
         database.createTable(tableName: "Recent")
     }
     

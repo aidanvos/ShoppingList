@@ -59,17 +59,17 @@ class SQLiteDataBase
             break
         case "Items":
             query = """
-            Items (ID INTEGER PRIMARY KEY AUTOINCREMENT, ListId INTEGER, Quantity INTEGER, Price INTEGER, Name CHAR(255), DatePurchased CHAR(255))
+            Items (ID INTEGER PRIMARY KEY AUTOINCREMENT, ListId INTEGER, Quantity INTEGER, Price INTEGER, Name CHAR(255), DatePurchased CHAR(255), Tags CHAR(255))
             """
             break
         case "History":
             query = """
-            History (ID INTEGER PRIMARY KEY AUTOINCREMENT, ListId INTEGER, Quantity INTEGER, Price INTEGER, Name CHAR(255), DatePurchased CHAR(255))
+            History (ID INTEGER PRIMARY KEY AUTOINCREMENT, ListId INTEGER, Quantity INTEGER, Price INTEGER, Name CHAR(255), DatePurchased CHAR(255), Tags CHAR(255))
             """
             break
         case "Recent":
             query = """
-            Recent (ID INTEGER PRIMARY KEY AUTOINCREMENT, ListId INTEGER, Quantity INTEGER, Price INTEGER, Name CHAR(255), DatePurchased CHAR(255))
+            Recent (ID INTEGER PRIMARY KEY AUTOINCREMENT, ListId INTEGER, Quantity INTEGER, Price INTEGER, Name CHAR(255), DatePurchased CHAR(255), Tags CHAR(255))
             """
             break
         default:
@@ -111,13 +111,13 @@ class SQLiteDataBase
     }
    
     func insertItem(item: Item, table: String) {
-        let insertItemQuery = "INSERT INTO \(table) (ID, ListId, Quantity, Price, Name, DatePurchased) VALUES (null, \(item.listId), \(item.quantity), \(item.price), '\(item.name)', '\(item.datePurchased)');"
+        let insertItemQuery = "INSERT INTO \(table) (ID, ListId, Quantity, Price, Name, DatePurchased, Tags) VALUES (null, \(item.listId), \(item.quantity), \(item.price), '\(item.name)', '\(item.datePurchased)', '\(item.tags)');"
         
         generalQuery(query: insertItemQuery, description: "Item \(item.name)", message: "inserted")
     }
     
     func updateItem(item: Item, table: String) {
-        let updateItemQuery = "UPDATE \(table) SET Quantity = \(item.quantity), Price = \(item.price), Name = '\(item.name)', DatePurchased = '\(item.datePurchased)' WHERE id = \(item.ID);"
+        let updateItemQuery = "UPDATE \(table) SET Quantity = \(item.quantity), Price = \(item.price), Name = '\(item.name)', DatePurchased = '\(item.datePurchased)', Tags = '\(item.tags)' WHERE id = \(item.ID);"
         
         generalQuery(query: updateItemQuery, description: "Item \(item.name)", message: "updated")
     }
@@ -159,7 +159,7 @@ class SQLiteDataBase
     func selectItems(listId: Int32) -> [Item] {
         var result = [Item]()
         
-        let selectStatementQuery = "SELECT id, listId, quantity, price, name, datePurchased FROM Items WHERE listId=\(listId)"
+        let selectStatementQuery = "SELECT id, listId, quantity, price, name, datePurchased, tags FROM Items WHERE listId=\(listId)"
         
         var selectStatement: OpaquePointer? = nil
         
@@ -171,7 +171,8 @@ class SQLiteDataBase
                     quantity: Float32(sqlite3_column_double(selectStatement, 2)),
                     price: Float32(sqlite3_column_double(selectStatement, 3)),
                     name: String (cString:sqlite3_column_text(selectStatement, 4)),
-                    datePurchased: String (cString:sqlite3_column_text(selectStatement, 5))
+                    datePurchased: String (cString:sqlite3_column_text(selectStatement, 5)),
+                    tags: String (cString:sqlite3_column_text(selectStatement, 6))
                     )
                 result += [item]
             }
@@ -187,7 +188,7 @@ class SQLiteDataBase
     func selectAllItems(tableName: String) -> [Item] {
         var result = [Item]()
         
-        let selectStatementQuery = "SELECT id, listId, quantity, price, name, datePurchased FROM \(tableName)"
+        let selectStatementQuery = "SELECT id, listId, quantity, price, name, datePurchased, tags FROM \(tableName)"
         
         var selectStatement: OpaquePointer? = nil
         if sqlite3_prepare_v2(db, selectStatementQuery, -1, &selectStatement, nil) == SQLITE_OK {
@@ -198,7 +199,8 @@ class SQLiteDataBase
                     quantity: Float32(sqlite3_column_double(selectStatement, 2)),
                     price: Float32(sqlite3_column_double(selectStatement, 3)),
                     name: String (cString:sqlite3_column_text(selectStatement, 4)),
-                    datePurchased: String (cString:sqlite3_column_text(selectStatement, 5))
+                    datePurchased: String (cString:sqlite3_column_text(selectStatement, 5)),
+                    tags: String (cString:sqlite3_column_text(selectStatement, 6))
                 )
                 result += [item]
             }

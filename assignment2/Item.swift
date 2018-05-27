@@ -5,4 +5,5 @@ public struct Item {
     var price: Float32
     var name: String
     var datePurchased: String
+    var tags: String
 }

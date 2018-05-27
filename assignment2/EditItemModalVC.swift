@@ -8,11 +8,13 @@
 
 import UIKit
 
-class EditItemModalVC: UIViewController, UITextFieldDelegate {
+class EditItemModalVC: UIViewController, UITextFieldDelegate, UICollectionViewDelegate, UICollectionViewDataSource {
     
     @IBOutlet weak var itemNameField: UITextField!
     @IBOutlet weak var quantityField: UITextField!
     @IBOutlet weak var priceField: UITextField!
+    @IBOutlet weak var tagField: UITextField!
+    @IBOutlet weak var collectionView: UICollectionView!
     
     let database : SQLiteDataBase = SQLiteDataBase(databaseName: "MyDatabase")
     let dateFormatter = DateFormatter()
@@ -24,16 +26,24 @@ class EditItemModalVC: UIViewController, UITextFieldDelegate {
     var price = Float(0)
     var name = ""
     var currentDate = ""
+    var tagsString = ""
+    
+    var tags = [String]()
 
     var item: Item?
     var tableName: String?
     
+
     override func viewDidLoad() {
         super.viewDidLoad()
         setTime()
+        collectionView.delegate = self
+        collectionView.dataSource = self
+        
         itemNameField.delegate = self
         quantityField.delegate = self
         priceField.delegate = self
+        tagField.delegate = self
         
         if ((item) != nil) {
             FillFields()
@@ -48,10 +58,18 @@ class EditItemModalVC: UIViewController, UITextFieldDelegate {
         currentDate = dateFormatter.string(from: date)
     }
     
+    @IBAction func addTagAction(_ sender: Any) {
+        if (tagField.text != "") {
+            tags.append(tagField.text!)
+            tagField.text = ""
+            collectionView.reloadData()
+        }
+    }
+    
     @IBAction func addItemToRecent(_ sender: Any) {
         if (itemNameField.text != "") {
             GetItemData()
-            database.insertItem(item: Item(ID: 0, listId: 0, quantity: quantity, price: price, name: name, datePurchased: currentDate), table: "Recent")
+            database.insertItem(item: Item(ID: 0, listId: 0, quantity: quantity, price: price, name: name, datePurchased: currentDate, tags: tagsString), table: "Recent")
         }
     }
     
@@ -75,23 +93,30 @@ class EditItemModalVC: UIViewController, UITextFieldDelegate {
 
     }
     
-    @objc func donePressed() {
-        let dateFormatter = DateFormatter()
-        dateFormatter.dateStyle = .short
-        dateFormatter.timeStyle = .none
-        
-        
-        self.view.endEditing(true)
-    }
+//    @objc func donePressed() {
+//        let dateFormatter = DateFormatter()
+//        dateFormatter.dateStyle = .short
+//        dateFormatter.timeStyle = .none
+//
+//
+//        self.view.endEditing(true)
+//    }
     
     func FillFields() {
         itemNameField.text = item!.name
         quantityField.text = String(item!.quantity)
         priceField.text = String(item!.price)
+        
+        let itemTags = item!.tags.components(separatedBy: ",")
+        
+        if itemTags[0] != "" {
+            tags = itemTags  
+        }
+        
     }
     
     func AddNewItem () {
-        database.insertItem(item: Item(ID: 0, listId: (listDetail?.ID)!, quantity: quantity, price: price, name: name, datePurchased: currentDate), table: "Items")
+        database.insertItem(item: Item(ID: 0, listId: (listDetail?.ID)!, quantity: quantity, price: price, name: name, datePurchased: currentDate, tags: tagsString), table: "Items")
     }
 
     func EditItem() {
@@ -99,7 +124,7 @@ class EditItemModalVC: UIViewController, UITextFieldDelegate {
         listId = tableName == "History" ? 1 : (listDetail?.ID)!
         
         
-        database.updateItem(item: Item(ID: item!.ID, listId: listId, quantity: quantity, price: price, name: name, datePurchased: currentDate), table: tableName!)
+        database.updateItem(item: Item(ID: item!.ID, listId: listId, quantity: quantity, price: price, name: name, datePurchased: currentDate, tags: tagsString), table: tableName!)
     }
     
     func GetItemData() {
@@ -107,6 +132,12 @@ class EditItemModalVC: UIViewController, UITextFieldDelegate {
         quantity = quantityField.text! == "" ? 1 : Float(quantityField.text!)!
         price = priceField.text == "" ? 0 : Float(priceField.text!)!
         name = itemNameField.text!
+        
+        tagsString = tags.joined(separator: ",")
+        print(tagsString)
+//        let stringToArray = arrayToString.components(separatedBy: ",")
+//        print(stringToArray)
+        
 
     }
     
@@ -122,4 +153,29 @@ class EditItemModalVC: UIViewController, UITextFieldDelegate {
         return (true)
     }
     
+    func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
+        return tags.count
+    }
+
+   func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "tagCell", for: indexPath)
+        if let listCell = cell as? TagCVC {
+            listCell.tagLabel.text = tags[indexPath.row]
+            
+            _ = listCell.tagButton
+            listCell.tagButton.addTarget(self, action: #selector(self.addTagButton(_:)), for: .touchUpInside)
+            listCell.tagButton.tag = indexPath.row
+        }
+
+    
+        return cell
+    }
+    
+    @objc func addTagButton(_ sender: UIButton) {
+        print("Button Worked: \(sender)")
+        
+        tags.remove(at: sender.tag)
+        
+        collectionView.reloadData()
+    }
 }
