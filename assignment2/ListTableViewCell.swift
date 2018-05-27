@@ -4,8 +4,6 @@ class ListTableViewCell: UITableViewCell {
 
     @IBOutlet weak var titleLabel: UILabel!
     @IBOutlet weak var quantityLabel: UILabel!
-    @IBOutlet weak var priceLabel: UILabel!
-    @IBOutlet weak var totalLabel: UILabel!
     
     @IBOutlet weak var checkButton: UIButton!
     override func awakeFromNib() {

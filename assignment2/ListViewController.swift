@@ -19,6 +19,7 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     var isSearching = false
 
+    @IBOutlet weak var cartButton: UIButton!
     @IBOutlet var listTableView: UITableView!
     @IBOutlet weak var titleField: UITextField!
     @IBOutlet weak var searchBar: UISearchBar!
@@ -30,7 +31,6 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
         searchBar.delegate = self
         
         searchBar.returnKeyType = UIReturnKeyType.done
-        searchBar.showsCancelButton = true
         
         refreshList()
         titleField.delegate = self
@@ -116,9 +116,7 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
         if let listCell = cell as? ListTableViewCell {
             listCell.titleLabel.text = item.name as String
             listCell.quantityLabel.text = String(item.quantity)
-            listCell.priceLabel.text = String(item.price)
             let total = item.quantity * item.price
-            listCell.totalLabel.text = String(format: "%.2f", total)
             listCell.checkButton.tag = indexPath.row
             listCell.checkButton.addTarget(self, action: #selector(self.checkCell(_:)), for: .touchUpInside)
         }
@@ -152,7 +150,7 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func showFilteredList() {
         isSearching = true
-        
+        filteredList.removeAll()
         for item in list {
             let itemTags = item.tags.components(separatedBy: ",")
             print("Tags: \(itemTags)")
@@ -179,6 +177,7 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
     }
     
     func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
+        searchBar.resignFirstResponder()
         if searchBar.text != "" {
             showFilteredList()
         }
@@ -190,10 +189,16 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
             item.ID == list[sender.tag].ID
         }) {
             itemsToPurchase.remove(at: index)
-            sender.setBackgroundImage(UIImage(named: "Add"), for: UIControlState.normal)
+            sender.setBackgroundImage(UIImage(named: "checkbox"), for: UIControlState.normal)
         } else {
             itemsToPurchase.append(list[sender.tag])
-            sender.setBackgroundImage(UIImage(named: "Add"), for: UIControlState.normal)
+            sender.setBackgroundImage(UIImage(named: "checkbox-checked"), for: UIControlState.normal)
+        }
+        
+        if (itemsToPurchase.count > 0) {
+            cartButton.setBackgroundImage(UIImage(named: "cart-yellow"), for: UIControlState.normal)
+        } else {
+            cartButton.setBackgroundImage(UIImage(named: "cart"), for: UIControlState.normal)
         }
 
         listTableView.reloadData()

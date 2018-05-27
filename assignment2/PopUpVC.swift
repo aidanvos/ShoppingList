@@ -22,6 +22,9 @@ class PopUpVC: UIViewController, UITextFieldDelegate {
         // Do any additional setup after loading the view.
     }
     
+    @IBAction func closePopUpAction(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
+    }
     @IBAction func closePopUp(_ sender: Any) {
         MakeNewList()
         dismiss(animated: true, completion: nil)
