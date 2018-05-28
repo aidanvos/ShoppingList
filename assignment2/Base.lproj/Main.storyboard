@@ -819,7 +819,7 @@
                                                         <color key="textColor" red="0.436783647" green="0.45543515709999999" blue="0.45976760789999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="1" placeholder="Quantity" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="sCR-Jj-Hks">
+                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="1" placeholder="1" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="sCR-Jj-Hks">
                                                         <rect key="frame" x="68.333333333333329" y="0.0" width="60.333333333333329" height="29"/>
                                                         <color key="textColor" red="0.436783647" green="0.45543515709999999" blue="0.45976760789999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <fontDescription key="fontDescription" name="ChalkboardSE-Bold" family="Chalkboard SE" pointSize="20"/>
@@ -831,7 +831,7 @@
                                                         <color key="textColor" red="0.436783647" green="0.45543515709999999" blue="0.45976760789999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <nil key="highlightedColor"/>
                                                     </label>
-                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="0.00" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Fbm-8m-rpt">
+                                                    <textField opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="left" contentVerticalAlignment="center" text="0.00" placeholder="0.00" textAlignment="natural" minimumFontSize="17" translatesAutoresizingMaskIntoConstraints="NO" id="Fbm-8m-rpt">
                                                         <rect key="frame" x="205.33333333333334" y="0.0" width="60.333333333333343" height="29"/>
                                                         <color key="textColor" red="0.436783647" green="0.45543515709999999" blue="0.45976760789999999" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                                         <fontDescription key="fontDescription" name="ChalkboardSE-Bold" family="Chalkboard SE" pointSize="20"/>

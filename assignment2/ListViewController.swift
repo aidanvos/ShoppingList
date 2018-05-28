@@ -107,7 +107,6 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if isSearching {
-            print("FilteredLISTCOUNT:  \(filteredList.count)")
             return filteredList.count
         }
         return list.count
@@ -165,7 +164,6 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
         filteredList.removeAll()
         for item in list {
             let itemTags = item.tags.components(separatedBy: ",")
-            print("Tags: \(itemTags)")
             if itemTags.contains(searchBar.text!) {
                 filteredList += [item]
             }
@@ -203,7 +201,6 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
             itemsToPurchase.remove(at: index)
             sender.setBackgroundImage(UIImage(named: "checkbox"), for: UIControlState.normal)
         } else {
-            print("ADD")
             itemsToPurchase.append(list[sender.tag])
             sender.setBackgroundImage(UIImage(named: "checkbox-checked"), for: UIControlState.normal)
         }
@@ -220,12 +217,9 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
     
     func addItemsToHistory () {
         
-        print("Here")
-        print(itemsToPurchase)
         for item in itemsToPurchase {
             database.insertItem(item: Item(ID: 0, listId: item.listId, quantity: item.quantity, price: item.price, name: item.name, datePurchased: item.datePurchased,
                                            tags: item.tags), table: "History")
-            print("What")
         }
         
         clearChecks = true

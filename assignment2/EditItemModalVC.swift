@@ -163,7 +163,6 @@ class EditItemModalVC: UIViewController, UITextFieldDelegate, UICollectionViewDe
     }
     
     @objc func addTagButton(_ sender: UIButton) {
-        print("Button Worked: \(sender)")
         
         tags.remove(at: sender.tag)
         
