@@ -15,14 +15,24 @@ class ListsViewController: UIViewController, UITableViewDataSource, UITableViewD
     @IBOutlet weak var listsTableView: UITableView!
     
     var lists = [ListDetail]()
+    
+    // Set to true to enable seeds.
+    var dev = false
 
     override func viewDidLoad() {
         super.viewDidLoad()
         listsTableView.delegate = self
         listsTableView.dataSource = self
         
-        createTables()
-        
+        if (dev) {
+            // Generate seeds for testing.
+            createSeeds()
+        } else {
+            // Comment out if you have just tested and want to clear seeds.
+            // dropTables()
+            createTables()
+        }
+
         refreshList()
     }
     
@@ -55,12 +65,32 @@ class ListsViewController: UIViewController, UITableViewDataSource, UITableViewD
         }
     }
     
+    func createSeeds() {
+        dropTables()
+        createTables()
+        var counter = 0
+        let items = ["Bread": "5/28/18", "Milk": "5/25/18", "Beef": "3/12/18", "Chicken": "11/11/17"]
+        let tags = ["Carbs", "Dairy", "Meat", "Meat"]
+        let tables = ["Items", "History"]
+        database.insertList(listDetail: ListDetail(ID: 0, name: "Test List"))
+        for table in tables {
+            for (item, date) in items {
+                database.insertItem(item: Item(ID: 0, listId: 1, quantity: 2, price: 2.50, name: item, datePurchased: date,
+                                               tags: tags[counter]), table: table)
+                counter += 1
+            }
+            counter = 0
+        }
+    }
+    
+    func dropTables() {
+        database.dropTable(tableName: "Lists")
+        database.dropTable(tableName: "Items")
+        database.dropTable(tableName: "History")
+        database.dropTable(tableName: "Recent")
+    }
+    
     func createTables() {
-//        database.dropTable(tableName: "Lists")
-//        database.dropTable(tableName: "Items")
-//        database.dropTable(tableName: "History")
-//        database.dropTable(tableName: "Recent")
-        
         database.createTable(tableName: "Lists")
         database.createTable(tableName: "Items")
         database.createTable(tableName: "History")

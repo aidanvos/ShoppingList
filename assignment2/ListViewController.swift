@@ -223,7 +223,7 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
         }
         
         clearChecks = true
-        
+        listTableView.reloadData()
         performSegue(withIdentifier: "addToHistorySegue", sender: self)
     }
 }
@@ -245,7 +245,6 @@ extension ListViewController: PopUpItemDelegate, RecentItemDelegate, ToHistoryDe
     
     func clearCheckMarks() {
         cartButton.setBackgroundImage(UIImage(named: "cart"), for: UIControlState.normal)
-        listTableView.reloadData()
         clearChecks = false
     }
     

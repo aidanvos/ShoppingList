@@ -71,6 +71,7 @@ class HistoryViewController: UIViewController, UITableViewDataSource, UITableVie
         historyList.removeAll()
         for item in tempData {
             let range = fromDate...toDate
+            print(item.datePurchased)
             let current = dateFormatter.date(from: item.datePurchased)
             if (range.contains(current!)) {
                 historyList += [item]
