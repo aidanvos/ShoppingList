@@ -43,7 +43,12 @@ class ListViewController: UIViewController, UITableViewDataSource, UITableViewDe
         dismiss(animated: true, completion: nil)
     }
     @IBAction func addButtonAction(_ sender: Any) {
-        performSegue(withIdentifier: "toRecentItemsSegue", sender: self)
+        if (list.count > 0) {
+            performSegue(withIdentifier: "toRecentItemsSegue", sender: self)
+        } else {
+            addNewItem()
+        }
+
     }
     
     @IBAction func purchaseButtonAction(_ sender: Any) {

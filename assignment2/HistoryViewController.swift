@@ -135,9 +135,13 @@ class HistoryViewController: UIViewController, UITableViewDataSource, UITableVie
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCell(withIdentifier: "HistoryTableViewCell", for: indexPath)
+        let reversedList = Array(historyList.reversed())
         
         if let itemCell = cell as? HistoryTableViewCell {
-            itemCell.itemLabel.text = historyList[indexPath.row].name
+            itemCell.itemLabel.text = reversedList[indexPath.row].name
+            let price = reversedList[indexPath.row].price * reversedList[indexPath.row].quantity
+            let formattedPrice = String(format: "%.2f", price)
+            itemCell.priceLabel.text = formattedPrice
         }
         return cell
     }

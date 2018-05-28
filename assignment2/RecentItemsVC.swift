@@ -26,7 +26,6 @@ class RecentItemsVC: UIViewController, UITableViewDataSource, UITableViewDelegat
         super.viewDidLoad()
         recentTableView.dataSource = self
         recentTableView.delegate = self
-        
         refresh()
     }
 
@@ -42,12 +41,6 @@ class RecentItemsVC: UIViewController, UITableViewDataSource, UITableViewDelegat
         recentList = database.selectAllItems(tableName: "Recent")
         recentTableView.reloadData()
     }
-//    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-//        if segue.identifier == "newItemSegue" {
-//            let editItemModal = segue.destination as! EditItemModalVC
-//            editItemModal.listDetail = listDetail
-//        }
-//    }
     
     func numberOfSections(in tableView: UITableView) -> Int {
         return 1

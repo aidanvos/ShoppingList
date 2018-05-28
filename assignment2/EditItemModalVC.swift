@@ -16,6 +16,7 @@ class EditItemModalVC: UIViewController, UITextFieldDelegate, UICollectionViewDe
     @IBOutlet weak var tagField: UITextField!
     @IBOutlet weak var collectionView: UICollectionView!
     
+    @IBOutlet weak var priceLabel: UILabel!
     let database : SQLiteDataBase = SQLiteDataBase(databaseName: "MyDatabase")
     let dateFormatter = DateFormatter()
     
@@ -73,9 +74,10 @@ class EditItemModalVC: UIViewController, UITextFieldDelegate, UICollectionViewDe
         }
     }
     
+    @IBAction func closePopUpAction(_ sender: Any) {
+        dismiss(animated: true, completion: nil)
+    }
     @IBAction func closePopUp(_ sender: Any) {
-        //AddNewItem()
-        // EditItem()
         if (itemNameField.text != "") {
             GetItemData()
             
@@ -90,17 +92,8 @@ class EditItemModalVC: UIViewController, UITextFieldDelegate, UICollectionViewDe
     }
     
     func textFieldDidEndEditing(_ textField: UITextField) {
-
+        GetItemData()
     }
-    
-//    @objc func donePressed() {
-//        let dateFormatter = DateFormatter()
-//        dateFormatter.dateStyle = .short
-//        dateFormatter.timeStyle = .none
-//
-//
-//        self.view.endEditing(true)
-//    }
     
     func FillFields() {
         itemNameField.text = item!.name
@@ -133,12 +126,10 @@ class EditItemModalVC: UIViewController, UITextFieldDelegate, UICollectionViewDe
         price = priceField.text == "" ? 0 : Float(priceField.text!)!
         name = itemNameField.text!
         
+        if (quantity > 0 && price > 0) {
+            priceLabel.text = String(quantity * price)
+        }
         tagsString = tags.joined(separator: ",")
-        print(tagsString)
-//        let stringToArray = arrayToString.components(separatedBy: ",")
-//        print(stringToArray)
-        
-
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -149,7 +140,7 @@ class EditItemModalVC: UIViewController, UITextFieldDelegate, UICollectionViewDe
         itemNameField.resignFirstResponder()
         quantityField.resignFirstResponder()
         priceField.resignFirstResponder()
-        
+        tagField.resignFirstResponder()
         return (true)
     }
     
